@@ -1,0 +1,1839 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     72427,       1831]
+NotebookOptionsPosition[     71976,       1811]
+NotebookOutlinePosition[     72329,       1827]
+CellTagsIndexPosition[     72286,       1824]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"pluck", "::", "usage"}], "=", 
+   "\"\<pluck[{{f,g},{umin,umax}},Nbordpts,{Ax,Ay},Check] produces an \
+interpolation function that has a 'dimple' centered at the thump-point \
+{Ax,Ay}\n-f,g are the *heads* of the border functions\n-Check is optional and \
+decides whether to check if point is near border (default is True)\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"pluck", "::", "hitinregion"}], "=", 
+   "\"\<The point `1` is not inside the region defined.\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"pluck", "::", "nearedge"}], "=", 
+   "\"\<Input point `1` is very close to the border of the region. Expect \
+interpolation to not be smooth.\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"pluck", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"f_", ",", "g_"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"umin_", ",", "umax_"}], "}"}]}], "}"}], ",", 
+       RowBox[{"Nbordpts_", "?", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"IntegerQ", "[", "#", "]"}], "&&", 
+           RowBox[{"Positive", "[", "#", "]"}]}], "&"}], ")"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"Ax_", ",", "Ay_"}], "}"}], ",", 
+       RowBox[{"Check_:", "True"}]}], "]"}], "/;", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"RegionMember", "[", 
+        RowBox[{
+         RowBox[{"parametricregion", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"f", ",", "g"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"Ax", ",", "Ay"}], "}"}]}], "]"}], ",", "True", ",", 
+       RowBox[{
+        RowBox[{"Message", "[", 
+         RowBox[{
+          RowBox[{"pluck", "::", "hitinregion"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"Ax", ",", "Ay"}], "}"}]}], "]"}], ";", 
+        RowBox[{"Abort", "[", "]"}], ";"}]}], "]"}]}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "hmax", ",", "\[Delta]", ",", "\[Gamma]", ",", "recurt", ",", 
+        "constructxy", ",", "oneline", ",", "datapts", ",", "recurtpoints", 
+        ",", "mesh"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{"Check", ",", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"NMinValue", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Sqrt", "[", 
+                 RowBox[{
+                  SuperscriptBox[
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"f", "[", "u", "]"}], "-", "Ax"}], ")"}], "2"], 
+                  "+", 
+                  SuperscriptBox[
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"g", "[", "u", "]"}], "-", "Ay"}], ")"}], "2"]}], 
+                 "]"}], ",", 
+                RowBox[{"u", ">", "umin"}], ",", 
+                RowBox[{"u", "\[LessEqual]", "umax"}]}], "}"}], ",", "u"}], 
+             "]"}], "\[LessEqual]", "0.1"}], ",", 
+           RowBox[{"Message", "[", 
+            RowBox[{
+             RowBox[{"pluck", "::", "nearedge"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"Ax", ",", "Ay"}], "}"}]}], "]"}], ",", "False"}], 
+          "]"}], ",", "False"}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"hmax", "=", "1"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"\[Delta]", "=", ".05"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+         RowBox[{"\[Gamma]", ":", 
+          RowBox[{"[", 
+           RowBox[{"0", ",", "1"}], "]"}]}], "\[Rule]", 
+         SuperscriptBox["R", "2"]}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"\[Gamma]", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"x1_", ",", "y1_"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"x2_", ",", "y2_"}], "}"}]}], "]"}], "[", "t_", "]"}], ":=",
+         " ", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"1", "-", "t"}], ")"}], "x1"}], "+", 
+           RowBox[{"t", " ", "x2"}]}], ",", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"1", "-", "t"}], ")"}], "y1"}], "+", 
+           RowBox[{"t", " ", "y2"}]}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+       
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "Constructs", " ", "points", " ", "for", " ", "a", " ", "line", " ", 
+         "from", " ", 
+         RowBox[{"(", 
+          RowBox[{"0", ",", "0"}], ")"}], " ", "to", " ", 
+         RowBox[{"(", 
+          RowBox[{"1", ",", "hmax"}], ")"}]}], " ", "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"recurt", "[", 
+         RowBox[{"{", 
+          RowBox[{"n_", ",", "t_", ",", "z_"}], "}"}], "]"}], ":=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"n", "+", "1"}], ",", 
+          RowBox[{"1", "-", 
+           RowBox[{
+            FractionBox[
+             RowBox[{"1", "-", "t"}], 
+             RowBox[{"hmax", "+", 
+              FractionBox["\[Delta]", 
+               RowBox[{"n", "+", "1"}]], "-", "z"}]], 
+            FractionBox[
+             RowBox[{"2", "\[Delta]"}], 
+             RowBox[{"n", "+", "1"}]]}]}], ",", 
+          RowBox[{"hmax", "-", 
+           FractionBox["\[Delta]", 
+            RowBox[{"n", "+", "1"}]]}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"recurtpoints", "=", 
+        RowBox[{"Join", "[", 
+         RowBox[{
+          RowBox[{"NestList", "[", 
+           RowBox[{"recurt", ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", "10"}], "]"}], 
+          ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{"1", "-", 
+                 FractionBox[
+                  RowBox[{"2", "\[Delta]"}], 
+                  RowBox[{"hmax", "+", "\[Delta]"}]]}], ")"}], 
+               FractionBox["i", "4"]}], ",", 
+              RowBox[{
+               RowBox[{"(", 
+                RowBox[{"hmax", "+", "\[Delta]"}], ")"}], 
+               RowBox[{"(", 
+                RowBox[{"1", "-", 
+                 FractionBox[
+                  RowBox[{"2", "\[Delta]"}], 
+                  RowBox[{"hmax", "+", "\[Delta]"}]]}], ")"}], 
+               FractionBox["i", "4"]}]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "1", ",", "3"}], "}"}]}], "]"}]}], "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+         RowBox[{"constructs", " ", "points", " ", "in", " ", 
+          SuperscriptBox["R", "3"], " ", "from", " ", "points", " ", 
+          "recursively", " ", "determined", " ", "previously", " ", "in", " ",
+           "recurt", " ", "using", " ", "a", " ", "border", " ", "point", " ",
+           "calculated", " ", "from", " ", "coordinate", " ", "function", " ",
+           "heads", " ", "f"}], ",", "g"}], " ", "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"constructxy", "[", "U_", "]"}], "[", 
+         RowBox[{"{", 
+          RowBox[{"n_", ",", "t_", ",", "z_"}], "}"}], "]"}], ":=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"\[Gamma]", "[", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"f", "[", "U", "]"}], ",", 
+               RowBox[{"g", "[", "U", "]"}]}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"ax", ",", "ay"}], "}"}]}], "]"}], "[", "t", "]"}], ",", 
+          RowBox[{"-", "z"}]}], "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+          "Now", " ", "define", " ", "a", " ", "function", " ", "to", " ", 
+           "create", " ", "set", " ", "of", " ", "points", " ", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"x", ",", "y"}], "}"}], ",", "z"}], "}"}], " ", "along",
+            " ", "one", " ", "line", " ", "from", " ", 
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"f", "[", "U", "]"}], ",", 
+             RowBox[{"g", "[", "U", "]"}]}], "}"}], " ", "to", " ", 
+           RowBox[{"{", 
+            RowBox[{"ax", ",", "ay"}], "}"}]}], " ", "-", " ", "f"}], ",", 
+         RowBox[{
+         "g", " ", "need", " ", "to", " ", "be", " ", "the", " ", "*", 
+          "heads", "*", " ", "of", " ", "the", " ", "coordinate", " ", 
+          "functions", " ", 
+          RowBox[{"e", ".", "g"}], " ", "Cos"}], ",", 
+         RowBox[{"Sin", " ", "NOT", " ", 
+          RowBox[{"Cos", "[", "u", "]"}]}], ",", 
+         RowBox[{"Sin", "[", "u", "]"}]}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"oneline", "[", "Num_", "]"}], "[", "U_", "]"}], ":=", 
+        RowBox[{"(", 
+         RowBox[{"Map", "[", 
+          RowBox[{
+           RowBox[{"constructxy", "[", "U", "]"}], ",", "recurtpoints"}], 
+          "]"}], ")"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+         RowBox[{
+         "Essentially", " ", "create", " ", "these", " ", "interpolation", 
+          " ", "points", " ", "for", " ", "a", " ", "bunch", " ", "of", " ", 
+          "lines", " ", "from", " ", "a", " ", "bunch", " ", "of", " ", 
+          "different", " ", "border", " ", "points", " ", "and", " ", "put", 
+          " ", "them", " ", "all", " ", "into", " ", "one", " ", "set"}], ",",
+          " ", 
+         RowBox[{
+         "then", " ", "interpolate", " ", "\[IndentingNewLine]", "hmax", " ", 
+          "is", " ", "Absolute", " ", "value", " ", "of", " ", "maximum", " ",
+           "depth", " ", 
+          RowBox[{"(", 
+           RowBox[{"default", " ", "is", " ", "1"}], ")"}]}]}], "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"datapts", "=", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"DeleteDuplicatesBy", "[", 
+           RowBox[{
+            RowBox[{"Append", "[", 
+             RowBox[{
+              RowBox[{"Flatten", "[", 
+               RowBox[{
+                RowBox[{"Map", "[", 
+                 RowBox[{
+                  RowBox[{"oneline", "[", "10", "]"}], ",", 
+                  RowBox[{"Range", "[", 
+                   RowBox[{"umin", ",", "umax", ",", 
+                    FractionBox[
+                    RowBox[{"umax", "-", "umin"}], "Nbordpts"]}], "]"}]}], 
+                 "]"}], ",", "1"}], "]"}], ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"ax", ",", "ay"}], "}"}], ",", 
+                RowBox[{"-", "hmax"}]}], "}"}]}], "]"}], ",", "First"}], 
+           "]"}], "/.", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"ax", "\[Rule]", "Ax"}], ",", 
+            RowBox[{"ay", "\[Rule]", "Ay"}]}], "}"}]}], ")"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"(*", " ", 
+        RowBox[{
+        "This", " ", "requires", " ", "a", " ", "random", " ", "addition", 
+         " ", "of", " ", "a", " ", "small", " ", "amount", " ", "to", " ", 
+         "make", " ", "sure", " ", "that", " ", "Mathematica", " ", "does", 
+         " ", "not", " ", "mistake", " ", "a", " ", "triangle", " ", "in", 
+         " ", "the", " ", "mesh", " ", "as", " ", "having", " ", "zero", " ", 
+         "area"}], " ", "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"mesh", "=", 
+        RowBox[{"NDSolve`FEM`ToElementMesh", "[", 
+         RowBox[{
+          RowBox[{"datapts", "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", "1"}], "]"}], "]"}], "+", 
+          RowBox[{"RandomReal", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{
+              RowBox[{"-", 
+               SuperscriptBox["10", 
+                RowBox[{"-", "9"}]]}], ",", 
+              SuperscriptBox["10", 
+               RowBox[{"-", "9"}]]}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"Length", "[", "datapts", "]"}], "}"}]}], "]"}]}], 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"NDSolve`FEM`ElementMeshInterpolation", "[", 
+        RowBox[{
+         RowBox[{"{", "mesh", "}"}], ",", 
+         RowBox[{"datapts", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "2"}], "]"}], "]"}], ",", 
+         RowBox[{"InterpolationOrder", "\[Rule]", "1"}]}], "]"}]}]}], "]"}]}],
+    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"peak", "::", "usage"}], "=", 
+   "\"\<peak[{{f_,g_},{umin_,umax_}},\[Delta],{x0,y0},check] produces a \
+spatial Gaussian with peak at {\!\(\*SubscriptBox[\(x\), \
+\(0\)]\),\!\(\*SubscriptBox[\(y\), \(0\)]\)} and width \[Delta]\n-f,g are the \
+*heads* of the border functions\n-check is an optional boolean used to see if \
+the hitpoint {x0,y0} is near the border and the default is True\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"peak", "::", "hitinregion"}], "=", 
+   "\"\<The point `1` is not inside the region defined.\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"peak", "::", "nearedge"}], "=", 
+   "\"\<Input point `1` is near the border of the region, so the produced \
+function will not be equal to 0 on the border close to `1`.\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"peak", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"f_", ",", "g_"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"umin_", ",", "umax_"}], "}"}]}], "}"}], ",", 
+       RowBox[{"\[Delta]_", "?", "Positive"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x0_", ",", "y0_"}], "}"}], ",", 
+       RowBox[{"check_:", "True"}]}], "]"}], "/;", 
+     RowBox[{"If", "[", 
+      RowBox[{
+       RowBox[{"RegionMember", "[", 
+        RowBox[{
+         RowBox[{"parametricregion", "[", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"f", ",", "g"}], "}"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x0", ",", "y0"}], "}"}]}], "]"}], ",", "True", ",", 
+       RowBox[{
+        RowBox[{"Message", "[", 
+         RowBox[{
+          RowBox[{"pluck", "::", "hitinregion"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"x0", ",", "y0"}], "}"}]}], "]"}], ";", 
+        RowBox[{"Abort", "[", "]"}], ";"}]}], "]"}]}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"A", ",", "\[Sigma]x", ",", "\[Sigma]y", ",", "Gaussian"}], 
+       "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{"check", ",", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"NMinValue", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"Sqrt", "[", 
+                 RowBox[{
+                  SuperscriptBox[
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"f", "[", "u", "]"}], "-", "x0"}], ")"}], "2"], 
+                  "+", 
+                  SuperscriptBox[
+                   RowBox[{"(", 
+                    RowBox[{
+                    RowBox[{"g", "[", "u", "]"}], "-", "y0"}], ")"}], "2"]}], 
+                 "]"}], ",", 
+                RowBox[{"u", ">", "umin"}], ",", 
+                RowBox[{"u", "\[LessEqual]", "umax"}]}], "}"}], ",", "u"}], 
+             "]"}], "\[LessEqual]", 
+            RowBox[{"2", "\[Delta]"}]}], ",", 
+           RowBox[{"Message", "[", 
+            RowBox[{
+             RowBox[{"peak", "::", "nearedge"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"x0", ",", "y0"}], "}"}]}], "]"}], ",", "False"}], 
+          "]"}], ",", "False"}], "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"A", "=", 
+        RowBox[{"-", "1"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"\[Sigma]x", "=", "\[Delta]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"\[Sigma]y", "=", "\[Delta]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Gaussian", "[", 
+         RowBox[{"u_", ",", "v_"}], "]"}], ":=", 
+        RowBox[{"A", " ", 
+         RowBox[{"Exp", "[", 
+          RowBox[{"-", 
+           RowBox[{"(", 
+            RowBox[{
+             FractionBox[
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{"u", "-", "x0"}], ")"}], "2"], 
+              RowBox[{"2", 
+               SuperscriptBox["\[Sigma]x", "2"]}]], "+", 
+             FractionBox[
+              SuperscriptBox[
+               RowBox[{"(", 
+                RowBox[{"v", "-", "y0"}], ")"}], "2"], 
+              RowBox[{"2", 
+               SuperscriptBox["\[Sigma]y", "2"]}]]}], ")"}]}], "]"}]}]}], ";",
+        "\[IndentingNewLine]", "Gaussian"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"parametricregion", "::", "usage"}], "=", 
+   "\"\<parametricregion[{{f,g},{umin,umax}}] produces a region from the \
+input simple closed parametrized border\n-f,g are the *heads* of the border \
+functions\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"parametricregion", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"f_", ",", "g_"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"umin_", ",", "umax_"}], "}"}]}], "}"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"pts", ",", "plot"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"plot", "=", 
+        RowBox[{"ParametricPlot", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"f", "[", "u", "]"}], ",", 
+            RowBox[{"g", "[", "u", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"u", ",", "umin", ",", "umax"}], "}"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"pts", "=", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"plot", "[", 
+             RowBox[{"[", 
+              RowBox[{"1", ",", "1", ",", "3", ",", "i", ",", "1"}], "]"}], 
+             "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "2", ",", 
+              RowBox[{
+               RowBox[{"Length", "[", 
+                RowBox[{"Position", "[", 
+                 RowBox[{"plot", ",", "Line"}], "]"}], "]"}], "+", "1"}]}], 
+             "}"}]}], "]"}], ",", "1"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       
+       RowBox[{"pts", "=", 
+        RowBox[{"DeleteDuplicates", "[", "pts", "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"BoundaryMeshRegion", "[", 
+        RowBox[{"pts", ",", 
+         RowBox[{"Line", "[", 
+          RowBox[{"Join", "[", 
+           RowBox[{
+            RowBox[{"Range", "[", 
+             RowBox[{
+              RowBox[{"Length", "[", "pts", "]"}], "-", "1"}], "]"}], ",", 
+            RowBox[{"{", "1", "}"}]}], "]"}], "]"}]}], "]"}]}]}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"egsystem", "::", "usage"}], "=", 
+   "\"\<egsystem[Num,const][region] determines the eigensystem up to Num'th \
+eigenvalue for the given region\n-const is the multiplied into Laplacian and \
+is optional, default = 1\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"egsystem", "[", 
+      RowBox[{
+       RowBox[{"Num_", "?", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"IntegerQ", "[", "#", "]"}], "&&", 
+           RowBox[{"Positive", "[", "#", "]"}]}], "&"}], ")"}]}], ",", 
+       RowBox[{"const_:", "1"}]}], "]"}], "[", 
+     RowBox[{"region_", "?", "RegionQ"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"f", ",", "freqs", ",", "vals", ",", "funcs"}], "}"}], ",", 
+      " ", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"vals", ",", "funcs"}], "}"}], "=", 
+        RowBox[{"NDEigensystem", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"-", "const"}], " ", 
+             RowBox[{"Laplacian", "[", 
+              RowBox[{
+               RowBox[{"f", "[", 
+                RowBox[{"x", ",", "y"}], "]"}], ",", 
+               RowBox[{"{", 
+                RowBox[{"x", ",", "y"}], "}"}]}], "]"}]}], ",", 
+            RowBox[{"DirichletCondition", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"f", "[", 
+                RowBox[{"x", ",", "y"}], "]"}], "\[Equal]", "0"}], ",", 
+              "True"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", "f", "}"}], ",", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"x", ",", "y"}], "}"}], "\[Element]", "region"}], ",", 
+          "Num"}], "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"freqs", "=", 
+        SqrtBox["vals"]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"freqs", ",", "funcs"}], "}"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"QOtriangleApprox", "::", "usage"}], "=", 
+   "\"\<QOtriangleApprox[efunclist] is a VERY fast approximation that uses \
+the Quadratic Order Triangle Rule (performs on each element on list input)\n\
+QOtriangleApprox[efunclist,hitfunction] does the same fast approximation but \
+has the integrand efunclist[[i]]*hit\n**Function list must be interpolation \
+functions over the same mesh**\nWARNING: If interpolation functions' meshes \
+are not made of triangles, this will give a false approximation.\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"QOtriangleApprox", "[", "efunclist_List", "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"emesh", ",", "indices"}], "}"}], ",", "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"emesh", "=", 
+       RowBox[{
+        RowBox[{"efunclist", "[", 
+         RowBox[{"[", "1", "]"}], "]"}], "[", "\"\<ElementMesh\>\"", "]"}]}], 
+      ";", "\[IndentingNewLine]", 
+      RowBox[{"indices", "=", 
+       RowBox[{
+        RowBox[{"emesh", "[", "\"\<MeshElements\>\"", "]"}], "/.", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"NDSolve`FEM`TriangleElement", "[", "t_", "]"}], "}"}], 
+         "\[RuleDelayed]", 
+         RowBox[{"Flatten", "@", 
+          RowBox[{"t", "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", 
+             RowBox[{"4", ";;", "6"}]}], "]"}], "]"}]}]}]}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"Table", "[", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Total", "[", 
+         RowBox[{
+          RowBox[{"Total", "[", 
+           RowBox[{
+            RowBox[{"Partition", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{"eigenfunction", "[", "\"\<ValuesOnGrid\>\"", "]"}], 
+               "[", 
+               RowBox[{"[", "indices", "]"}], "]"}], ",", "3"}], "]"}], ",", 
+            RowBox[{"{", "2", "}"}]}], "]"}], "*", "\[IndentingNewLine]", 
+          RowBox[{
+           RowBox[{"First", "@", 
+            RowBox[{
+             RowBox[{"eigenfunction", "[", "\"\<ElementMesh\>\"", "]"}], "[", 
+             "\"\<MeshElementMeasure\>\"", "]"}]}], "/", "3"}]}], "]"}], ",", 
+        "\[IndentingNewLine]", 
+        RowBox[{"{", 
+         RowBox[{"eigenfunction", ",", "efunclist"}], "}"}]}], "]"}]}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"QOtriangleApprox", "[", 
+     RowBox[{"efunclist_List", ",", "hit_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"emesh", ",", "indices", ",", "hitvals"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"emesh", "=", 
+        RowBox[{
+         RowBox[{"efunclist", "[", 
+          RowBox[{"[", "1", "]"}], "]"}], "[", "\"\<ElementMesh\>\"", "]"}]}],
+        ";", "\[IndentingNewLine]", 
+       RowBox[{"indices", "=", 
+        RowBox[{
+         RowBox[{"emesh", "[", "\"\<MeshElements\>\"", "]"}], "/.", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"NDSolve`FEM`TriangleElement", "[", "t_", "]"}], "}"}], 
+          "\[RuleDelayed]", 
+          RowBox[{"Flatten", "@", 
+           RowBox[{"t", "[", 
+            RowBox[{"[", 
+             RowBox[{"All", ",", 
+              RowBox[{"4", ";;", "6"}]}], "]"}], "]"}]}]}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"hitvals", "=", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"hit", "[", 
+           RowBox[{
+            RowBox[{"#", "[", 
+             RowBox[{"[", "1", "]"}], "]"}], ",", 
+            RowBox[{"#", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], "]"}], "&"}], "/@", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"efunclist", "[", 
+            RowBox[{"[", "1", "]"}], "]"}], "[", "\"\<Grid\>\"", "]"}], "[", 
+          RowBox[{"[", "indices", "]"}], "]"}]}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Table", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"Total", "[", 
+          RowBox[{
+           RowBox[{"Total", "[", 
+            RowBox[{
+             RowBox[{"Partition", "[", 
+              RowBox[{
+               RowBox[{"hitvals", "*", 
+                RowBox[{
+                 RowBox[{"eigenfunction", "[", "\"\<ValuesOnGrid\>\"", "]"}], 
+                 "[", 
+                 RowBox[{"[", "indices", "]"}], "]"}]}], ",", "3"}], "]"}], 
+             ",", 
+             RowBox[{"{", "2", "}"}]}], "]"}], "*", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"First", "@", 
+             RowBox[{
+              RowBox[{"eigenfunction", "[", "\"\<ElementMesh\>\"", "]"}], 
+              "[", "\"\<MeshElementMeasure\>\"", "]"}]}], "/", "3"}]}], "]"}],
+          ",", "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"eigenfunction", ",", "efunclist"}], "}"}]}], "]"}]}]}], 
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"freqsintens", "::", "usage"}], "=", 
+   "\"\<freqsintens[{{f,g},{umin,umax}},numberfreqs,method][thumpoints] gives \
+the first numberfreqs eigenfrequencies of the region {{f,g},{umin,umax}} with \
+corresponding intensities when thumped at the points thumpoints\n-method is \
+how the thumps are modeled and is optional, default = Peak\n-Uses \
+parametricregion, egsystem, pluck or peak, and QOtriangleApprox2\n-Scales the \
+intensities so that the fundamental has intensity 1\n-outputs a list in the \
+form\n\t{{{freqlist,intensitylist1},{freqlists,intensitylist2},...},...}\>\""}\
+], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"freqsintens", "::", "fmethod"}], "=", 
+   "\"\<Method `1` is not a valid method. Valid methods are: \
+{Peak,Pluck}\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"freqsintens", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"f_", ",", "g_"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"umin_", ",", "umax_"}], "}"}]}], "}"}], ",", 
+       RowBox[{"numberfreqs_", "?", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"IntegerQ", "[", "#", "]"}], "&&", 
+           RowBox[{"Positive", "[", "#", "]"}]}], "&"}], ")"}]}], ",", 
+       RowBox[{"method_:", "\"\<Peak\>\""}]}], "]"}], "[", "thumpoints_", 
+     "]"}], ":=", "\[IndentingNewLine]", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "region", ",", "funcs", ",", "freqs", ",", "thumps", ",", "coefs", ",",
+         "intens"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"region", "=", 
+        RowBox[{"parametricregion", "[", 
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"f", ",", "g"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"freqs", ",", "funcs"}], "}"}], "=", 
+        RowBox[{
+         RowBox[{"egsystem", "[", "numberfreqs", "]"}], "[", "region", 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"thumps", "=", 
+        RowBox[{"Switch", "[", 
+         RowBox[{"method", ",", "\[IndentingNewLine]", "\"\<Peak\>\"", ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"peak", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"f", ",", "g"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], ",", "0.05", 
+              ",", 
+              RowBox[{"thumpoints", "[", 
+               RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "1", ",", 
+              RowBox[{"Length", "[", "thumpoints", "]"}]}], "}"}]}], "]"}], 
+          ",", "\[IndentingNewLine]", "\"\<Pluck\>\"", ",", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"pluck", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"{", 
+                 RowBox[{"f", ",", "g"}], "}"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], ",", "100", 
+              ",", 
+              RowBox[{"thumpoints", "[", 
+               RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "1", ",", 
+              RowBox[{"Length", "[", "thumpoints", "]"}]}], "}"}]}], "]"}], 
+          ",", "\[IndentingNewLine]", "_", ",", 
+          RowBox[{
+           RowBox[{"Message", "[", 
+            RowBox[{
+             RowBox[{"freqsintens", "::", "fmethod"}], ",", 
+             RowBox[{"OptionValue", "[", "method", "]"}]}], "]"}], ";", 
+           RowBox[{"Abort", "[", "]"}], ";"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"coefs", "=", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"QOtriangleApprox", "[", 
+           RowBox[{"funcs", ",", 
+            RowBox[{"thumps", "[", 
+             RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"Length", "[", "thumps", "]"}]}], "}"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"intens", "=", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          SuperscriptBox[
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{"coefs", "[", 
+              RowBox[{"[", 
+               RowBox[{"i", ",", "All"}], "]"}], "]"}], "/", 
+             RowBox[{"coefs", "[", 
+              RowBox[{"[", 
+               RowBox[{"i", ",", "1"}], "]"}], "]"}]}], ")"}], "2"], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"Length", "[", "coefs", "]"}]}], "}"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"freqs", "[", 
+            RowBox[{"[", "All", "]"}], "]"}], ",", 
+           RowBox[{"intens", "[", 
+            RowBox[{"[", 
+             RowBox[{"i", ",", "All"}], "]"}], "]"}]}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "1", ",", 
+           RowBox[{"Length", "[", "thumpoints", "]"}]}], "}"}]}], "]"}]}]}], 
+     "]"}]}], ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"graphfi", "::", "usage"}], "=", 
+   "\"\<graphfi[{{f,g},{umin,umax}},numberfreqs,method][thumpts] outputs a \
+frequency vs intensity graph for the given border and thump points\nUses a \
+log scale on the y-axis, so it is easier to see all the frequencies\n**Uses \
+freqsintens so will take just as long**\>\""}], ";"}], "\[IndentingNewLine]", 
+
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"graphfi", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"f_", ",", "g_"}], "}"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"umin_", ",", "umax_"}], "}"}]}], "}"}], ",", 
+       RowBox[{"numberfreqs_", "?", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"IntegerQ", "[", "#", "]"}], "&&", 
+           RowBox[{"Positive", "[", "#", "]"}]}], "&"}], ")"}]}], ",", 
+       RowBox[{"method_:", "\"\<Peak\>\""}]}], "]"}], "[", "thumpoints_", 
+     "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"list", ",", "fipairs"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"list", "=", 
+        RowBox[{
+         RowBox[{"freqsintens", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{
+             RowBox[{"{", 
+              RowBox[{"f", ",", "g"}], "}"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], ",", 
+           "numberfreqs", ",", "method"}], "]"}], "[", "thumpoints", "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"fipairs", "=", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"list", "[", 
+             RowBox[{"[", 
+              RowBox[{"i", ",", "1", ",", "x"}], "]"}], "]"}], ",", 
+            RowBox[{"list", "[", 
+             RowBox[{"[", 
+              RowBox[{"i", ",", "2", ",", "x"}], "]"}], "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "1", ",", 
+            RowBox[{"Length", "[", "thumpoints", "]"}]}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"x", ",", "1", ",", 
+            RowBox[{"Length", "[", 
+             RowBox[{"list", "[", 
+              RowBox[{"[", 
+               RowBox[{"1", ",", "2"}], "]"}], "]"}], "]"}]}], "}"}]}], 
+         "]"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"ListLogPlot", "[", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"Legended", "[", 
+            RowBox[{
+             RowBox[{"fipairs", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], ",", 
+             RowBox[{"thumpoints", "[", 
+              RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "1", ",", 
+             RowBox[{"Length", "[", "thumpoints", "]"}]}], "}"}]}], "]"}], 
+         ",", 
+         RowBox[{"Filling", "\[Rule]", "Axis"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
+         RowBox[{"AxesLabel", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"\"\<Frequency\>\"", ",", "\"\<Intensity\>\""}], "}"}]}]}],
+         "]"}]}]}], "]"}]}], ";"}], "\n"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"keep", "::", "usage"}], "=", 
+   "\"\<keep[eigenfuncitonlist,threshhold] returns a list: True if Keep and \
+False if Not Keep according to threshhold\n-threshhold is optional, default = \
+0\n-Requires eigenfunctions to be the head of function over region\n-Uses \
+QOtriangleApprox\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"keep", "[", 
+     RowBox[{"eigenfunctionlist_List", ",", 
+      RowBox[{"threshhold_:", "0"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"ints", ",", "keeplist", ",", "i"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"ints", "=", 
+        RowBox[{"Abs", "[", 
+         RowBox[{"QOtriangleApprox", "[", "eigenfunctionlist", "]"}], "]"}]}],
+        ";", "\[IndentingNewLine]", 
+       RowBox[{"keeplist", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"i", "=", "1"}], ",", 
+         RowBox[{"i", "\[LessEqual]", 
+          RowBox[{"Length", "[", "eigenfunctionlist", "]"}]}], ",", 
+         RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"ints", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], "\[GreaterEqual]", 
+            "threshhold"}], ",", "\[IndentingNewLine]", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"keeplist", ",", "True"}], "]"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"keeplist", ",", "False"}], "]"}]}], "]"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", "keeplist"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"loudfreqs", "::", "usage"}], "=", 
+   "\"\<loudfreqs[eigenfunctionlist, threshhold] returns list of indices of \
+frequencies that do not 'cancel' themselves out according to threshhold\n\
+-Uses keep\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"loudfreqs", "[", 
+     RowBox[{"fun_List", ",", 
+      RowBox[{"threshhold_:", "0"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"decision", ",", "keeps", ",", "i"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"decision", "=", 
+        RowBox[{"keep", "[", 
+         RowBox[{"fun", ",", "threshhold"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"keeps", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"i", "=", "1"}], ",", 
+         RowBox[{"i", "\[LessEqual]", 
+          RowBox[{"Length", "[", "fun", "]"}]}], ",", 
+         RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"decision", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", "\[IndentingNewLine]", 
+           RowBox[{
+            RowBox[{"AppendTo", "[", 
+             RowBox[{"keeps", ",", "i"}], "]"}], ";"}], ",", 
+           "\[IndentingNewLine]", 
+           RowBox[{"False", ";"}]}], "]"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", "keeps"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"graphweight", "::", "usage"}], "=", 
+   "\"\<graphweight[eigenfuncitonlist] produces a Manipulate[] command that \
+can be used to find a good threshhold/cutoff for heard and un-heard \
+frequencies\n-Uses QOtriangleApprox\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"graphweight", "::", "input"}], "=", 
+   "\"\<[eigenfunctionlist]\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"graphweight", "[", "fun_List", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"Clear", "[", 
+        RowBox[{"ints", ",", "lp", ",", "thp"}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"ints", "=", 
+        RowBox[{"Abs", "[", 
+         RowBox[{"QOtriangleApprox", "[", "fun", "]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"lp", "=", 
+        RowBox[{"ListPlot", "[", 
+         RowBox[{"ints", ",", 
+          RowBox[{"PlotRange", "\[Rule]", "All"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"thp", "[", "t_", "]"}], ":=", 
+        RowBox[{"Plot", "[", 
+         RowBox[{"t", ",", 
+          RowBox[{"{", 
+           RowBox[{"x", ",", "0", ",", 
+            RowBox[{
+             RowBox[{"Length", "[", "ints", "]"}], "+", "5"}]}], "}"}], ",", 
+          RowBox[{"Filling", "\[Rule]", "Axis"}], ",", 
+          RowBox[{"FillingStyle", "\[Rule]", 
+           RowBox[{"Opacity", "[", "0.2", "]"}]}], ",", 
+          RowBox[{"PlotStyle", "\[Rule]", "Thin"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Manipulate", "[", 
+        RowBox[{
+         RowBox[{"Show", "[", 
+          RowBox[{"lp", ",", 
+           RowBox[{"thp", "[", "threshhold", "]"}]}], "]"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"threshhold", ",", "0", ",", 
+           RowBox[{"Max", "[", "ints", "]"}], ",", 
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{
+              RowBox[{"Max", "[", "ints", "]"}], "-", 
+              RowBox[{"Min", "[", "ints", "]"}]}], ")"}], "/", "100"}]}], 
+          "}"}]}], "]"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"colorfreqs", "::", "usage"}], "=", 
+   "\"\< colorfreqs[eigenfunctionlist,threshhold] assigns Red to indices that \
+should be kept (given a threshhold) and Blue to indices that should not be \
+kept\n-threshhold is optional, default = 0\n-Uses keep\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"colorfreqs", "[", 
+     RowBox[{"fun_List", ",", 
+      RowBox[{"threshhold_:", "0"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"decision", ",", "color"}], "}"}], ",", "\[IndentingNewLine]", 
+      
+      RowBox[{
+       RowBox[{"decision", "=", 
+        RowBox[{"keep", "[", 
+         RowBox[{"fun", ",", "threshhold"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{"decision", "[", 
+            RowBox[{"[", "i", "]"}], "]"}], ",", "Red", ",", "Blue"}], "]"}], 
+         ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{"Length", "[", "fun", "]"}]}], "}"}]}], "]"}]}]}], "]"}]}],
+    ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"freqband", "::", "usage"}], "=", 
+   "\"\<freqband[minimum, maximum, color] outputs a band for a single \
+frequency in Graphics[]\n-color is optional, default = Red\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"freqband", "[", 
+     RowBox[{"min_Numeric", ",", "max_Numeric", ",", 
+      RowBox[{"color_:", "Red"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"ave", ",", "thickness"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"ave", "=", 
+        RowBox[{"Mean", "[", 
+         RowBox[{"{", 
+          RowBox[{"min", ",", "max"}], "}"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"thickness", "=", 
+        RowBox[{
+         RowBox[{"(", 
+          RowBox[{"min", "-", "max"}], ")"}], "/", "2"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"{", 
+        RowBox[{"color", ",", 
+         RowBox[{"Thickness", "[", "thickness", "]"}], ",", 
+         RowBox[{"Opacity", "[", "0.5", "]"}], ",", 
+         RowBox[{"InfiniteLine", "[", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"ave", ",", "0"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"0", ",", "1"}], "}"}]}], "]"}]}], "}"}]}]}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"freqlines", "::", "usage"}], "=", 
+   "\"\<freqlines[minsystem, maxsystem, threshhold] outputs graphic of \
+frequency bands corresponding to minsystem and maxsystem with correct colors \
+and thicknesses\n-threshhold is optional, default = 0\n-Uses colorfreqs and \
+freqband\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"freqlines", "[", 
+     RowBox[{"minsystem_List", ",", "maxsystem_List", ",", 
+      RowBox[{"threshhold_:", "0"}]}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"color", ",", "lines"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"color", "=", 
+        RowBox[{"colorfreqs", "[", 
+         RowBox[{
+          RowBox[{"minsystem", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], ",", "threshhold"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"lines", "[", "i_", "]"}], ":=", 
+        RowBox[{"If", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"Length", "[", "maxsystem", "]"}], "\[Equal]", "0"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"color", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], ",", "Thin", ",", 
+            RowBox[{"Infinity", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{"minsystem", "[", 
+                RowBox[{"[", 
+                 RowBox[{"1", ",", "i"}], "]"}], "]"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"0", ",", "1"}], "}"}]}], "]"}]}], "}"}], ",", 
+          RowBox[{"freqband", "[", 
+           RowBox[{
+            RowBox[{"minsystem", "[", 
+             RowBox[{"[", 
+              RowBox[{"1", ",", "i"}], "]"}], "]"}], ",", 
+            RowBox[{"maxsystem", "[", 
+             RowBox[{"[", 
+              RowBox[{"1", ",", "i"}], "]"}], "]"}], ",", 
+            RowBox[{"color", "[", 
+             RowBox[{"[", "i", "]"}], "]"}]}], "]"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"lines", "[", "i", "]"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", 
+             RowBox[{"Length", "[", 
+              RowBox[{"minsystem", "[", 
+               RowBox[{"[", "1", "]"}], "]"}], "]"}]}], "}"}]}], "]"}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", 
+              RowBox[{
+               RowBox[{"Max", "[", 
+                RowBox[{"minsystem", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "]"}], "*", "1.1"}]}], "}"}],
+             ",", 
+            RowBox[{"{", 
+             RowBox[{"0", ",", 
+              RowBox[{
+               RowBox[{"Max", "[", 
+                RowBox[{"minsystem", "[", 
+                 RowBox[{"[", "1", "]"}], "]"}], "]"}], "*", "0.25"}]}], 
+             "}"}]}], "}"}]}], ",", 
+         RowBox[{"Frame", "\[Rule]", "True"}]}], "]"}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"print3Dborder", "::", "usage"}], "=", 
+   "\"\<print3Dborder[{{f,g},{umin,umax}},width,height] produces a 3D border \
+(rectangular cross-sections) that can be exported to .stl and 3D-printed\n\
+-f,g need to be the heads of the border functions\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"print3Dborder", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"x_", ",", "y_"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"umin_", ",", "umax_"}], "}"}]}], "}"}], ",", 
+     RowBox[{"width_", "?", "Positive"}], ",", 
+     RowBox[{"height_", "?", "Positive"}]}], "]"}], ":=", 
+   RowBox[{"ParametricPlot3D", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"x", "[", "u", "]"}], ",", 
+       RowBox[{"y", "[", "u", "]"}], ",", "z"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"u", ",", "umin", ",", "umax"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"z", ",", "0", ",", "height"}], "}"}], ",", 
+     RowBox[{"PlotStyle", "\[Rule]", 
+      RowBox[{"Thickness", "[", "width", "]"}]}], ",", 
+     RowBox[{"PlotPoints", "\[Rule]", "100"}], ",", 
+     RowBox[{"Boxed", "\[Rule]", "False"}], ",", 
+     RowBox[{"Mesh", "\[Rule]", "None"}], ",", 
+     RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"print3Dregion", "::", "usage"}], "=", 
+   "\"\<print3Dregion[{{f,g},{umin,umax}},borderwidth,borderthickness,\
+membranethickness] constructs the membrane and bottom border (possibly base) \
+for a given parametrized border\n-f,g need to be the heads of the border \
+functions\n-Uses parametricregion and print3Dborder\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"print3Dregion", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"f_", ",", "g_"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"umin_", ",", "umax_"}], "}"}]}], "}"}], ",", 
+     RowBox[{"borderwidth_", "?", "Positive"}], ",", 
+     RowBox[{"borderthickness_", "?", "Positive"}], ",", 
+     RowBox[{"membranethickness_", "?", "Positive"}]}], "]"}], ":=", 
+   RowBox[{"Module", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"region", ",", "membrane", ",", "border"}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{
+      RowBox[{"region", "=", 
+       RowBox[{"parametricregion", "[", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"f", ",", "g"}], "}"}], ",", 
+          RowBox[{"{", 
+           RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"membrane", "=", 
+       RowBox[{"ParametricPlot3D", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{"x", ",", "y", ",", "0"}], "}"}], ",", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{"x", ",", "y"}], "}"}], "\[Element]", "region"}], ",", 
+         RowBox[{"PlotStyle", "\[Rule]", 
+          RowBox[{"Thickness", "[", "membranethickness", "]"}]}], ",", 
+         RowBox[{"Mesh", "\[Rule]", "None"}], ",", 
+         RowBox[{"Boxed", "\[Rule]", "False"}], ",", 
+         RowBox[{"Axes", "\[Rule]", "False"}]}], "]"}]}], ";", 
+      "\[IndentingNewLine]", 
+      RowBox[{"border", "=", 
+       RowBox[{"print3Dborder", "[", 
+        RowBox[{
+         RowBox[{"{", 
+          RowBox[{
+           RowBox[{"{", 
+            RowBox[{"f", ",", "g"}], "}"}], ",", 
+           RowBox[{"{", 
+            RowBox[{"umin", ",", "umax"}], "}"}]}], "}"}], ",", "borderwidth",
+          ",", "borderthickness"}], "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Show", "[", 
+       RowBox[{"membrane", ",", "border"}], "]"}]}]}], "]"}]}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"p", "::", "usage"}], "=", 
+   "\"\<p[V][t] produces a parametrization of a polygonal line determined by \
+points in list V in the order given\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"p", "[", "V_List", "]"}], "[", "t_", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", "\[ScriptL]", "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{
+         RowBox[{"\[ScriptL]", "[", "i_", "]"}], "[", "t0_", "]"}], ":=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"1", "-", "t0"}], ")"}], 
+            RowBox[{"V", "[", 
+             RowBox[{"[", 
+              RowBox[{"i", ",", "1"}], "]"}], "]"}]}], "+", 
+           RowBox[{"t0", " ", 
+            RowBox[{"V", "[", 
+             RowBox[{"[", 
+              RowBox[{
+               RowBox[{"i", "+", "1"}], ",", "1"}], "]"}], "]"}]}]}], ",", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"(", 
+             RowBox[{"1", "-", "t0"}], ")"}], 
+            RowBox[{"V", "[", 
+             RowBox[{"[", 
+              RowBox[{"i", ",", "2"}], "]"}], "]"}]}], "+", 
+           RowBox[{"t0", " ", 
+            RowBox[{"V", "[", 
+             RowBox[{"[", 
+              RowBox[{
+               RowBox[{"i", "+", "1"}], ",", "2"}], "]"}], "]"}]}]}]}], 
+         "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{
+         RowBox[{"\[ScriptL]", "[", "1", "]"}], "[", "t", "]"}], "+", 
+        RowBox[{"Sum", "[", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"UnitStep", "[", 
+            RowBox[{"t", "-", "i", "+", "1"}], "]"}], 
+           RowBox[{"(", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"\[ScriptL]", "[", "i", "]"}], "[", 
+              RowBox[{"t", "-", "i", "+", "1"}], "]"}], "-", 
+             RowBox[{
+              RowBox[{"\[ScriptL]", "[", 
+               RowBox[{"i", "-", "1"}], "]"}], "[", 
+              RowBox[{"t", "-", "i", "+", "2"}], "]"}]}], ")"}]}], ",", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "2", ",", 
+            RowBox[{
+             RowBox[{"Length", "[", "V", "]"}], "-", "1"}]}], "}"}]}], 
+         "]"}]}]}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"vard", "::", "usage"}], "=", 
+   "\"\<vard[dmin][\[CapitalOmega]] outputs the variance in the differences \
+of the input list of frequencies \[CapitalOmega]\n-dmin is optional, default \
+= 0.1\>\""}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"vard", "[", 
+      RowBox[{"dmin_:", "0.1"}], "]"}], "[", "\[CapitalOmega]_List", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"\[CapitalOmega]star", ",", "i"}], "}"}], ",", 
+      "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"\[CapitalOmega]star", "=", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"\[CapitalOmega]", "[", 
+           RowBox[{"[", "2", "]"}], "]"}], "-", 
+          RowBox[{"\[CapitalOmega]", "[", 
+           RowBox[{"[", "1", "]"}], "]"}]}], "}"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"i", "=", "2"}], ",", 
+         RowBox[{"i", "<", 
+          RowBox[{"Length", "[", "\[CapitalOmega]", "]"}]}], ",", 
+         RowBox[{"i", "++"}], ",", 
+         RowBox[{"AppendTo", "[", 
+          RowBox[{"\[CapitalOmega]star", ",", 
+           RowBox[{
+            RowBox[{"\[CapitalOmega]", "[", 
+             RowBox[{"[", 
+              RowBox[{"i", "+", "1"}], "]"}], "]"}], "-", 
+            RowBox[{"\[CapitalOmega]", "[", 
+             RowBox[{"[", "i", "]"}], "]"}]}]}], "]"}]}], "]"}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"i", "=", "1"}], ",", 
+         RowBox[{"i", "\[LessEqual]", 
+          RowBox[{"Length", "[", "\[CapitalOmega]star", "]"}]}], ",", 
+         RowBox[{"i", "++"}], ",", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{"\[CapitalOmega]star", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], "\[LessEqual]", "dmin"}], ",", 
+           RowBox[{"\[CapitalOmega]star", "=", 
+            RowBox[{"Delete", "[", 
+             RowBox[{"\[CapitalOmega]star", ",", "i"}], "]"}]}]}], "]"}]}], 
+        "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"Variance", "[", "\[CapitalOmega]star", "]"}]}]}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"disvector", "::", "usage"}], "=", 
+   "\"\<disvector[rmin][\[CapitalOmega]] outputs a 'displacement' vector \
+where each element is the distance a frequency is from a corresponding \
+perfect frequency\n-rmin is optional, default = 1.01\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{
+     RowBox[{"disvector", "[", 
+      RowBox[{"rmin_:", "1.01"}], "]"}], "[", "\[CapitalOmega]_List", "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "freqs", ",", "number", ",", "line", ",", "perf", ",", "displacement", 
+        ",", "i"}], "}"}], ",", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"freqs", "=", 
+        RowBox[{"{", 
+         RowBox[{"{", 
+          RowBox[{"1", ",", 
+           RowBox[{"\[CapitalOmega]", "[", 
+            RowBox[{"[", "1", "]"}], "]"}]}], "}"}], "}"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"number", "=", "1"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"For", "[", 
+        RowBox[{
+         RowBox[{"i", "=", "2"}], ",", 
+         RowBox[{"i", "\[LessEqual]", 
+          RowBox[{"Length", "[", "\[CapitalOmega]", "]"}]}], ",", 
+         RowBox[{"i", "++"}], ",", "\[IndentingNewLine]", 
+         RowBox[{"If", "[", 
+          RowBox[{
+           RowBox[{
+            RowBox[{
+             RowBox[{"\[CapitalOmega]", "[", 
+              RowBox[{"[", "i", "]"}], "]"}], "/", 
+             RowBox[{"\[CapitalOmega]", "[", 
+              RowBox[{"[", 
+               RowBox[{"i", "-", "1"}], "]"}], "]"}]}], "\[LessEqual]", 
+            "rmin"}], ",", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"freqs", ",", 
+             RowBox[{"{", 
+              RowBox[{"number", ",", 
+               RowBox[{"\[CapitalOmega]", "[", 
+                RowBox[{"[", "i", "]"}], "]"}]}], "}"}]}], "]"}], ",", 
+           RowBox[{"AppendTo", "[", 
+            RowBox[{"freqs", ",", 
+             RowBox[{"{", 
+              RowBox[{
+               RowBox[{"++", "number"}], ",", 
+               RowBox[{"\[CapitalOmega]", "[", 
+                RowBox[{"[", "i", "]"}], "]"}]}], "}"}]}], "]"}]}], "]"}]}], 
+        "\[IndentingNewLine]", "]"}], ";", "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"line", "[", "t_", "]"}], ":=", 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"Fit", "[", 
+           RowBox[{"freqs", ",", 
+            RowBox[{"{", "t", "}"}], ",", "t"}], "]"}], "//", "Evaluate"}], 
+         ")"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"perf", "=", 
+        RowBox[{"Map", "[", 
+         RowBox[{"line", ",", 
+          RowBox[{"freqs", "[", 
+           RowBox[{"[", 
+            RowBox[{"All", ",", "1"}], "]"}], "]"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"displacement", "=", 
+        RowBox[{
+         RowBox[{"freqs", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "2"}], "]"}], "]"}], "-", "perf"}]}], ";", 
+       "\[IndentingNewLine]", "displacement"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"soundanalysispg", "::", "usage"}], "=", 
+   "\"\<soundanalysispg[filepath,numhits] produces the Periodogram of the \
+sound file at filepath that has numhits hits in it\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"soundanalysispg", "[", 
+     RowBox[{"filepath_", ",", "numhits_"}], "]"}], ":=", 
+    RowBox[{"Module", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{
+       "bin", ",", "data", ",", "peak", ",", "peaks", ",", "peakfc", ",", 
+        "peaklocation", ",", "allpeaks"}], "}"}], ",", "\[IndentingNewLine]", 
+      
+      RowBox[{
+       RowBox[{"bin", "=", 
+        RowBox[{"Import", "[", 
+         RowBox[{"filepath", ",", "\"\<Data\>\""}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"data", "=", 
+        RowBox[{"bin", "[", 
+         RowBox[{"[", 
+          RowBox[{"1", ",", 
+           RowBox[{"1", ";;", 
+            RowBox[{"-", "1"}], ";;", "1"}]}], "]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"peak", "=", 
+        RowBox[{"FindPeaks", "[", 
+         RowBox[{"data", ",", "10", ",", "0", ",", "0.100"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"peaks", "=", 
+        RowBox[{"Round", "[", 
+         RowBox[{"peak", "[", 
+          RowBox[{"[", 
+           RowBox[{"All", ",", "1"}], "]"}], "]"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"peakfc", "=", 
+        RowBox[{"FindClusters", "[", 
+         RowBox[{"peaks", ",", " ", "numhits"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"peaklocation", "=", 
+        RowBox[{"Round", "[", 
+         RowBox[{"Mean", "/@", "peakfc"}], "]"}]}], ";", 
+       "\[IndentingNewLine]", 
+       RowBox[{"allpeaks", "=", 
+        RowBox[{"Table", "[", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"data", "[", 
+           RowBox[{"[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"peaklocation", "[", 
+               RowBox[{"[", "i", "]"}], "]"}], "-", "300"}], ";;", 
+             RowBox[{"Min", "[", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{"peaklocation", "[", 
+                  RowBox[{"[", "i", "]"}], "]"}], "+", "2000"}], ",", 
+                RowBox[{"Length", "[", "data", "]"}]}], "}"}], "]"}]}], "]"}],
+            "]"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"Length", "[", "peaklocation", "]"}]}], "}"}]}], "]"}]}], 
+       ";", "\[IndentingNewLine]", 
+       RowBox[{"Periodogram", "[", 
+        RowBox[{"allpeaks", ",", 
+         RowBox[{"SampleRate", "\[Rule]", "11025"}], ",", 
+         RowBox[{"PlotStyle", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{"PlotTheme", "\[Rule]", "\"\<Detailed\>\""}], "}"}]}], ",", 
+         RowBox[{"PlotRange", "\[Rule]", 
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"0", ",", "2000"}], "}"}], ",", "All"}], "}"}]}], ",", 
+         RowBox[{"PlotLegends", "\[Rule]", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"IntegerString", "[", "i", "]"}], ",", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", 
+              RowBox[{"Length", "[", "allpeaks", "]"}]}], "}"}]}], "]"}]}], 
+         ",", 
+         RowBox[{"ImageSize", "\[Rule]", "Large"}]}], "]"}]}]}], "]"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"comparetheovals", "::", "usage"}], "=", 
+   "\"\<comparetheovals[{theovals,theocolor},pg,amax] produces a Manipulate \
+command that allows for lines at theovals (with each colored according to \
+theocolor) to be scaled up to a factor of amax overlayed on pg.\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"comparetheovals", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"theovals_", ",", "theocolor_"}], "}"}], ",", "pg_", ",", 
+      RowBox[{"amax_:", "1000"}]}], "]"}], ":=", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"ClearAll", "[", "vertlines", "]"}], ";", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"vertlines", "[", "a_", "]"}], ":=", 
+       RowBox[{"Graphics", "[", 
+        RowBox[{"Table", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"theocolor", "[", 
+             RowBox[{"[", "i", "]"}], "]"}], ",", "Thin", ",", 
+            RowBox[{"InfiniteLine", "[", 
+             RowBox[{
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"a", " ", 
+                 RowBox[{"theovals", "[", 
+                  RowBox[{"[", "i", "]"}], "]"}]}], ",", "0"}], "}"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"0", ",", "1"}], "}"}]}], "]"}]}], "}"}], ",", 
+          "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"Length", "[", "theovals", "]"}]}], "}"}]}], "]"}], 
+        "]"}]}], ";", "\[IndentingNewLine]", 
+      RowBox[{"Manipulate", "[", 
+       RowBox[{
+        RowBox[{"Show", "[", 
+         RowBox[{"pg", ",", 
+          RowBox[{"vertlines", "[", "a", "]"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"a", ",", "0", ",", "amax"}], "}"}]}], "]"}]}], ")"}]}], 
+   ";"}], "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"necessaryfunctionslist", "::", "usage"}], "=", 
+   "\"\<{pluck, peak, parametricregion, egsystem, QOtriangleApprox, \
+freqsintens, graphfi, keep, loudfreqs, graphweight, colorfreqs, freqband, \
+freqlines, print3Dborder, print3Dregion, p, vard, \
+disvector,soundanalysispg,comparetheovals}\>\""}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"necessaryfunctionslist", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "pluck", ",", "peak", ",", "parametricregion", ",", "egsystem", ",", 
+     "QOtriangleApprox", ",", "freqsintens", ",", "graphfi", ",", "keep", ",",
+      "loudfreqs", ",", "graphweight", ",", "colorfreqs", ",", "freqband", 
+     ",", "freqlines", ",", "print3Dborder", ",", "print3Dregion", ",", "p", 
+     ",", "vard", ",", "disvector", ",", "soundanalysispg", ",", 
+     "comparetheovals"}], "}"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.677693712489105*^9, 3.6776937281816607`*^9}, {
+   3.6776940471245728`*^9, 3.677694410761278*^9}, {3.677694563328556*^9, 
+   3.677694589030538*^9}, {3.677694643030241*^9, 3.677694664306278*^9}, {
+   3.67784091562232*^9, 3.677840918572555*^9}, {3.6778413600823812`*^9, 
+   3.677841397141642*^9}, {3.677841593031989*^9, 3.6778416160787363`*^9}, {
+   3.6778416578698263`*^9, 3.6778416632286386`*^9}, {3.677841693279231*^9, 
+   3.677841693741693*^9}, {3.677841753189211*^9, 3.677842696261365*^9}, 
+   3.6778427609283752`*^9, {3.677842792837839*^9, 3.677842840040584*^9}, {
+   3.6778429004851313`*^9, 3.6778429954438143`*^9}, {3.677843028877287*^9, 
+   3.677843116878852*^9}, {3.677843235535358*^9, 3.6778435032914667`*^9}, {
+   3.677843691922285*^9, 3.677843745899115*^9}, {3.677843877608747*^9, 
+   3.677843943771534*^9}, {3.677844044394899*^9, 3.677844085265316*^9}, {
+   3.677844388401246*^9, 3.677844483897225*^9}, {3.677844600581008*^9, 
+   3.677844603792321*^9}, {3.677845007766265*^9, 3.67784578119559*^9}, {
+   3.677854357942976*^9, 3.677854363734848*^9}, {3.677854545481248*^9, 
+   3.67785454839312*^9}, {3.677854613665188*^9, 3.677854616191304*^9}, 
+   3.677854654445511*^9, {3.6778546955514803`*^9, 3.6778547054761133`*^9}, {
+   3.6778547954296417`*^9, 3.677854797380164*^9}, {3.677854841737043*^9, 
+   3.677854891477499*^9}, {3.677854942713072*^9, 3.677854963163567*^9}, {
+   3.677855078603854*^9, 3.6778551467937727`*^9}, {3.6778552434036417`*^9, 
+   3.677855244360159*^9}, {3.6778552866692457`*^9, 3.677855305402259*^9}, {
+   3.6778554383300037`*^9, 3.677855439001536*^9}, {3.677855494665835*^9, 
+   3.677855647314307*^9}, {3.677855897200058*^9, 3.677855897990238*^9}, {
+   3.6778559821043167`*^9, 3.677856231495227*^9}, {3.67785630159895*^9, 
+   3.677856322084499*^9}, {3.677856361446927*^9, 3.677856444513*^9}, {
+   3.677932786940838*^9, 3.677932827263713*^9}, {3.677932944488104*^9, 
+   3.677932972457655*^9}, 3.678012427281938*^9, {3.678099060782428*^9, 
+   3.67809907941593*^9}, {3.678099196209484*^9, 3.678099215467884*^9}, {
+   3.678099256941628*^9, 3.678099259599238*^9}, {3.678188713803802*^9, 
+   3.6781887487359657`*^9}, {3.678198403265377*^9, 3.678198514248797*^9}, {
+   3.6781985511015663`*^9, 3.678198682709742*^9}, {3.6781993661571608`*^9, 
+   3.678199406372085*^9}, {3.67853993948643*^9, 3.67853994164141*^9}, {
+   3.6785399721608467`*^9, 3.678539990545321*^9}, {3.67854004761808*^9, 
+   3.678540104187066*^9}, {3.678540140190681*^9, 3.6785401432856627`*^9}, {
+   3.678541157378496*^9, 3.67854115963811*^9}, {3.678541199948741*^9, 
+   3.678541240675599*^9}, {3.678541290554265*^9, 3.678541306106621*^9}, {
+   3.678541363588553*^9, 3.678541372016711*^9}, {3.678543660557478*^9, 
+   3.678543662322814*^9}, {3.678543701885832*^9, 3.6785437414787397`*^9}, {
+   3.678543795939198*^9, 3.678543837311792*^9}, {3.678543880443842*^9, 
+   3.678543968907587*^9}, {3.678544049942576*^9, 3.678544057909783*^9}, {
+   3.678544104738016*^9, 3.678544108504669*^9}, {3.678544147549737*^9, 
+   3.678544223991521*^9}, {3.6785458241221113`*^9, 3.6785458259187193`*^9}, {
+   3.6785458734202642`*^9, 3.678545956612994*^9}, {3.678546013707768*^9, 
+   3.67854601713881*^9}, {3.6785461979199553`*^9, 3.678546200815476*^9}, {
+   3.678619062294818*^9, 3.678619067547741*^9}, {3.678621405505472*^9, 
+   3.678621415880562*^9}, {3.678621484038746*^9, 3.6786214850056477`*^9}, {
+   3.678624146150998*^9, 3.678624157834238*^9}, {3.678624319790238*^9, 
+   3.678624320118331*^9}, {3.678624750551631*^9, 3.6786248092338457`*^9}, {
+   3.678627829347929*^9, 3.678628066121125*^9}, {3.678628191684699*^9, 
+   3.678628439455764*^9}, {3.678628489236864*^9, 3.678629062323902*^9}, {
+   3.679400439928822*^9, 3.67940050929585*^9}, {3.679400593806382*^9, 
+   3.679400597732669*^9}, {3.679400628533824*^9, 3.679400630634369*^9}, {
+   3.6794008717335463`*^9, 3.679400874988385*^9}, {3.679742397643162*^9, 
+   3.6797424056026917`*^9}, {3.680265696736623*^9, 3.680265959859426*^9}, {
+   3.680267084272149*^9, 3.680267084583878*^9}, {3.680267137487063*^9, 
+   3.680267141739441*^9}, {3.680267884284522*^9, 3.680267892264798*^9}, {
+   3.680267956481453*^9, 3.680267956671831*^9}}],
+
+Cell[BoxData[
+ RowBox[{"Module", "[", 
+  RowBox[{
+   RowBox[{"{", "templist", "}"}], ",", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"templist", "=", 
+     RowBox[{"Join", "[", 
+      RowBox[{"necessaryfunctionslist", ",", 
+       RowBox[{"{", 
+        RowBox[{"HoldPattern", "[", "necessaryfunctionslist", "]"}], "}"}]}], 
+      "]"}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"FullDefinition", "@@", "templist"}], " ", ">>", " ", 
+     "\"\</Users/tomeichlersmith/Desktop/Summer Research 2016/Necessary \
+Functions.m\>\""}]}]}], "]"}]], "Input",
+ CellChangeTimes->{{3.677844768577525*^9, 3.6778448141946507`*^9}, {
+  3.677844850232538*^9, 3.677844862993518*^9}, {3.677844902251479*^9, 
+  3.6778449477661057`*^9}, {3.67862434143959*^9, 3.6786243619596453`*^9}, {
+  3.678624401699402*^9, 3.678624402543036*^9}, {3.678624559564846*^9, 
+  3.678624583697288*^9}}],
+
+Cell[BoxData[
+ RowBox[{"ClearAll", "[", 
+  RowBox[{
+  "pluck", ",", "peak", ",", "parametricregion", ",", "egsystem", ",", 
+   "QOtriangleApprox", ",", "freqsintens", ",", "graphfi", ",", "keep", ",", 
+   "loudfreqs", ",", "graphweight", ",", "colorfreqs", ",", "freqband", ",", 
+   "freqlines", ",", "print3Dborder", ",", "print3Dregion", ",", "p", ",", 
+   "vard", ",", "disvector", ",", "soundanalysispg", ",", "comparetheovals", 
+   ",", "necessaryfunctionslist"}], "]"}]], "Input",
+ CellChangeTimes->{{3.677843987650489*^9, 3.6778439996658916`*^9}, {
+   3.677844684051846*^9, 3.677844685391787*^9}, {3.6779329578775797`*^9, 
+   3.677932960007433*^9}, {3.678198734450943*^9, 3.678198738455858*^9}, {
+   3.678621466595861*^9, 3.678621468210712*^9}, {3.678621717272296*^9, 
+   3.678621717862211*^9}, {3.678624786700438*^9, 3.678624787554941*^9}, {
+   3.678624843779377*^9, 3.678624844257123*^9}, 3.679400604639352*^9, {
+   3.680265985328299*^9, 3.680265992513536*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Get", "[", 
+  "\"\</Users/tomeichlersmith/Desktop/Summer Research 2016/Necessary \
+Functions.m\>\"", "]"}]], "Input",
+ CellChangeTimes->{{3.677844005132443*^9, 3.677844012286707*^9}, {
+  3.68026793659984*^9, 3.680267937389558*^9}}],
+
+Cell[BoxData["\<\"{pluck, peak, parametricregion, egsystem, QOtriangleApprox, \
+freqsintens, graphfi, keep, loudfreqs, graphweight, colorfreqs, freqband, \
+freqlines, print3Dborder, print3Dregion, p, vard, \
+disvector,soundanalysispg,comparetheovals}\"\>"], "Output",
+ CellChangeTimes->{
+  3.678624643577886*^9, 3.678624801176454*^9, 3.6786248408112097`*^9, 
+   3.678627476920165*^9, 3.678629078742586*^9, {3.679400863070916*^9, 
+   3.6794008901397676`*^9}, 3.679742434217149*^9, 3.680265996117797*^9, 
+   3.6802671931761103`*^9, 3.680267937873114*^9, 3.680267968535174*^9}]
+}, Open  ]]
+},
+WindowSize->{1128, 655},
+WindowMargins->{{1, Automatic}, {Automatic, 0}},
+FrontEndVersion->"11.0 for Mac OS X x86 (32-bit, 64-bit Kernel) (July 28, \
+2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 68688, 1731, 5864, "Input"],
+Cell[69249, 1753, 881, 19, 75, "Input"],
+Cell[70133, 1774, 970, 15, 75, "Input"],
+Cell[CellGroupData[{
+Cell[71128, 1793, 255, 5, 32, "Input"],
+Cell[71386, 1800, 574, 8, 54, "Output"]
+}, Open  ]]
+}
+]
+*)
+

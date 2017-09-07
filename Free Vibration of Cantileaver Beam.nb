@@ -1,0 +1,315 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.4' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[      9867,        307]
+NotebookOptionsPosition[      9172,        279]
+NotebookOutlinePosition[      9525,        295]
+CellTagsIndexPosition[      9482,        292]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["Background", "Section",
+ CellChangeTimes->{{3.679914185692408*^9, 3.6799141933947372`*^9}}],
+
+Cell[TextData[ButtonBox["Link to source",
+ BaseStyle->"Hyperlink",
+ ButtonData->{
+   URL["http://iitg.vlab.co.in/?sub=62&brch=175&sim=1080&cnt=1"], None},
+ ButtonNote->
+  "http://iitg.vlab.co.in/?sub=62&brch=175&sim=1080&cnt=1"]], "Text",
+ CellChangeTimes->{{3.679914134854183*^9, 3.679914178529608*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Mathematics", "Subsection",
+ CellChangeTimes->{{3.679914201843995*^9, 3.679914204898633*^9}}],
+
+Cell["The ODE for the motion of a beam is", "Text",
+ CellChangeTimes->{{3.6799142076503963`*^9, 3.6799142405766687`*^9}}],
+
+Cell[TextData[Cell[BoxData[
+ FormBox[GridBox[{
+    {
+     RowBox[{
+      RowBox[{GridBox[{
+         {
+          RowBox[{
+           FractionBox[
+            SuperscriptBox["\[DifferentialD]", "2"], 
+            RowBox[{"\[DifferentialD]", 
+             SuperscriptBox["x", "2"]}]], 
+           RowBox[{"{", 
+            RowBox[{"E", " ", 
+             RowBox[{"I", "(", "x", ")"}], 
+             FractionBox[
+              RowBox[{
+               SuperscriptBox["\[DifferentialD]", "2"], 
+               RowBox[{"Y", "(", "x", ")"}]}], 
+              RowBox[{"\[DifferentialD]", 
+               SuperscriptBox["x", "2"]}]]}]}]}]}
+        },
+        GridBoxAlignment->{"Columns" -> {{"="}}}], "}"}], "=", 
+      RowBox[{
+       SuperscriptBox["\[Omega]", "2"], "\[Rho]", " ", 
+       RowBox[{"A", "(", "x", ")"}], 
+       RowBox[{"Y", "(", "x", ")"}]}]}]}
+   },
+   GridBoxItemSize->{"Columns" -> {{
+        Scaled[0.96]}}}], TraditionalForm]]]], "Text",
+ CellChangeTimes->{{3.679914252195077*^9, 3.6799143270944157`*^9}}],
+
+Cell[TextData[{
+ "where ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"E", "\[Congruent]", 
+     RowBox[{"modulus", " ", "of", " ", "rigidity"}]}], ",", " ", 
+    RowBox[{
+     RowBox[{"I", "(", "x", ")"}], " ", "\[Congruent]", " ", 
+     RowBox[{
+     "moment", " ", "of", " ", "inertia", " ", "of", " ", "cross", " ", 
+      "section", " ", "at", " ", "x"}]}], ",", " ", 
+    RowBox[{"\[Omega]", "\[Congruent]", 
+     RowBox[{"frequency", " ", "of", " ", "vibration"}]}], ",", " ", 
+    RowBox[{"\[Rho]", "\[Congruent]", "density"}], ",", 
+    RowBox[{
+     RowBox[{"A", "(", "x", ")"}], "\[Congruent]", 
+     RowBox[{
+     "Area", " ", "of", " ", "cross", " ", "seciton", " ", "at", " ", "x"}]}],
+     ",", " ", 
+    RowBox[{
+     RowBox[{"and", " ", 
+      RowBox[{"Y", "(", "x", ")"}]}], "\[Congruent]", 
+     RowBox[{"displacement", " ", "at", " ", "position", " ", "x"}]}]}], 
+   TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ "\nthen we have the boundary conditions"
+}], "Text",
+ CellChangeTimes->{{3.6799143404467*^9, 3.679914471113739*^9}, {
+  3.6799145078310633`*^9, 3.679914529867152*^9}}],
+
+Cell[TextData[Cell[BoxData[
+ FormBox[GridBox[{
+    {GridBox[{
+       {GridBox[{
+          {
+           RowBox[{
+            RowBox[{"Y", 
+             RowBox[{"(", "0", ")"}]}], "=", "0"}], 
+           RowBox[{
+            SubscriptBox[
+             RowBox[{
+              FractionBox[
+               RowBox[{"\[DifferentialD]", 
+                RowBox[{"Y", "(", "x", ")"}]}], 
+               RowBox[{"\[DifferentialD]", "x"}]], "\[RightBracketingBar]"}], 
+             
+             RowBox[{"x", "=", "0"}]], "=", "0"}]},
+          {
+           RowBox[{
+            SubscriptBox[
+             RowBox[{
+              FractionBox[
+               RowBox[{
+                SuperscriptBox["\[DifferentialD]", "2"], 
+                RowBox[{"Y", "(", "x", ")"}]}], 
+               RowBox[{"\[DifferentialD]", 
+                SuperscriptBox["x", "2"]}]], "\[RightBracketingBar]"}], 
+             RowBox[{"x", "=", "l"}]], "=", "0"}], 
+           RowBox[{
+            SubscriptBox[
+             RowBox[{
+              FractionBox[
+               RowBox[{
+                SuperscriptBox["\[DifferentialD]", "3"], 
+                RowBox[{"Y", "(", "x", ")"}]}], 
+               RowBox[{"\[DifferentialD]", 
+                SuperscriptBox["x", "3"]}]], "\[RightBracketingBar]"}], 
+             RowBox[{"x", "=", "l"}]], "=", "0"}]}
+         }]}
+      },
+      GridBoxAlignment->{"Columns" -> {{"\[AlignmentMarker]"}}}]}
+   },
+   GridBoxItemSize->{"Columns" -> {{
+        Scaled[0.96]}}}], TraditionalForm]]]], "Text",
+ CellChangeTimes->{{3.679914590812235*^9, 3.679914870758852*^9}}],
+
+Cell[TextData[{
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"I", "(", "x", ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " and ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"A", "(", "x", ")"}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " can be written in terms of ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    RowBox[{"h", "(", "x", ")"}], "\[Congruent]", 
+    RowBox[{"height", " ", 
+     RowBox[{"(", "thickness", ")"}], " ", "of", " ", "beam", " ", "at", " ", 
+     "x"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"]
+}], "Text",
+ CellChangeTimes->{{3.67991504507973*^9, 3.6799150879993343`*^9}}],
+
+Cell[TextData[Cell[BoxData[
+ FormBox[GridBox[{
+    {GridBox[{
+       {
+        RowBox[{
+         RowBox[{
+          RowBox[{"I", "(", "x", ")"}], "=", 
+          FractionBox[
+           RowBox[{"w", " ", 
+            SuperscriptBox[
+             RowBox[{"h", "(", "x", ")"}], "3"]}], "12"]}], 
+         "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{"A", "(", "x", ")"}], "=", 
+          RowBox[{"w", " ", 
+           RowBox[{"h", "(", "x", ")"}]}]}]}]}
+      },
+      GridBoxAlignment->{"Columns" -> {{"="}}}]}
+   },
+   GridBoxItemSize->{"Columns" -> {{
+        Scaled[0.96]}}}], TraditionalForm]]]], "Text",
+ CellChangeTimes->{{3.6799150968578568`*^9, 3.679915139176511*^9}}],
+
+Cell[TextData[{
+ "where ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"w", "\[Congruent]", 
+    RowBox[{"width", " ", "of", " ", "beam"}]}], TraditionalForm]],
+  FormatType->"TraditionalForm"],
+ " (",
+ StyleBox["assuming that only the thickness changes",
+  FontWeight->"Bold"],
+ "). Therefore, we can write our ODE as"
+}], "Text",
+ CellChangeTimes->{{3.679915142398789*^9, 3.679915218219111*^9}}],
+
+Cell[TextData[Cell[BoxData[
+ FormBox[GridBox[{
+    {
+     RowBox[{GridBox[{
+        {
+         RowBox[{
+          RowBox[{GridBox[{
+             {
+              RowBox[{
+               FractionBox[
+                SuperscriptBox["\[DifferentialD]", "2"], 
+                RowBox[{"\[DifferentialD]", 
+                 SuperscriptBox["x", "2"]}]], 
+               RowBox[{"{", 
+                RowBox[{"E", " ", 
+                 FractionBox[
+                  RowBox[{"w", " ", 
+                   SuperscriptBox[
+                    RowBox[{"h", "(", "x", ")"}], "3"]}], "12"], 
+                 FractionBox[
+                  RowBox[{
+                   SuperscriptBox["\[DifferentialD]", "2"], 
+                   RowBox[{"Y", "(", "x", ")"}]}], 
+                  RowBox[{"\[DifferentialD]", 
+                   SuperscriptBox["x", "2"]}]]}]}]}]}
+            },
+            GridBoxAlignment->{"Columns" -> {{"="}}}], "}"}], "=", 
+          RowBox[{
+           SuperscriptBox["\[Omega]", "2"], "\[Rho]", " ", "w", " ", 
+           RowBox[{"h", "(", "x", ")"}], 
+           RowBox[{"Y", "(", "x", ")"}]}]}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{"="}}}], "\[IndentingNewLine]", 
+      GridBox[{
+        {
+         RowBox[{
+          RowBox[{GridBox[{
+             {
+              RowBox[{
+               FractionBox[
+                SuperscriptBox["\[DifferentialD]", "2"], 
+                RowBox[{"\[DifferentialD]", 
+                 SuperscriptBox["x", "2"]}]], 
+               RowBox[{"{", 
+                RowBox[{
+                 SuperscriptBox[
+                  RowBox[{"h", "(", "x", ")"}], "3"], 
+                 FractionBox[
+                  RowBox[{
+                   SuperscriptBox["\[DifferentialD]", "2"], 
+                   RowBox[{"Y", "(", "x", ")"}]}], 
+                  RowBox[{"\[DifferentialD]", 
+                   SuperscriptBox["x", "2"]}]]}]}]}]}
+            },
+            GridBoxAlignment->{"Columns" -> {{"="}}}], "}"}], "=", 
+          RowBox[{
+           FractionBox[
+            RowBox[{"12", " ", "\[Rho]"}], "E"], 
+           SuperscriptBox["\[Omega]", "2"], 
+           RowBox[{"h", "(", "x", ")"}], 
+           RowBox[{"Y", "(", "x", ")"}]}]}]}
+       },
+       GridBoxAlignment->{"Columns" -> {{"="}}}]}]}
+   },
+   GridBoxItemSize->{"Columns" -> {{
+        Scaled[0.96]}}}], TraditionalForm]]]], "Text",
+ CellChangeTimes->{{3.679915223163752*^9, 3.679915265777166*^9}, {
+  3.679915296022772*^9, 3.679915329165032*^9}}]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{808, 655},
+WindowMargins->{{4, Automatic}, {Automatic, 4}},
+FrontEndVersion->"10.4 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 11, \
+2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 97, 1, 64, "Section"],
+Cell[680, 25, 304, 6, 30, "Text"],
+Cell[CellGroupData[{
+Cell[1009, 35, 99, 1, 44, "Subsection"],
+Cell[1111, 38, 121, 1, 30, "Text"],
+Cell[1235, 41, 1020, 29, 48, "Text"],
+Cell[2258, 72, 1115, 29, 71, "Text"],
+Cell[3376, 103, 1576, 44, 82, "Text"],
+Cell[4955, 149, 623, 20, 32, "Text"],
+Cell[5581, 171, 690, 21, 68, "Text"],
+Cell[6274, 194, 390, 12, 31, "Text"],
+Cell[6667, 208, 2477, 67, 92, "Text"]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+
