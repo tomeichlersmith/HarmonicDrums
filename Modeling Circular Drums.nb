@@ -10,27 +10,30 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     26059,        684]
-NotebookOptionsPosition[     24440,        624]
-NotebookOutlinePosition[     24794,        640]
-CellTagsIndexPosition[     24751,        637]
+NotebookDataLength[     26207,        686]
+NotebookOptionsPosition[     24600,        627]
+NotebookOutlinePosition[     24940,        642]
+CellTagsIndexPosition[     24897,        639]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
-Cell[BoxData[
- RowBox[{"Get", "[", 
-  "\"\</Users/tomeichlersmith/Desktop/Summer Research 2016/Necessary \
-Functions.m\>\"", "]"}]], "Input",
- CellChangeTimes->{{3.678442035005044*^9, 3.6784420562855597`*^9}}],
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Get", "[", "\"\<Necessary Functions.m\>\"", "]"}]}], "Input",
+ CellChangeTimes->{{3.678442035005044*^9, 3.6784420562855597`*^9}, {
+  3.7144076356726904`*^9, 3.714407653094356*^9}}],
 
 Cell[BoxData["\<\"{pluck, peak, parametricregion, egsystem, QOtriangleApprox, \
-QOtriangleApprox2, freqsintens, graphfi, keep, loudfreqs, graphweight, \
-colorfreqs, freqband, freqlines, print3Dborder, print3Dregion, p, vard, \
-disvector}\"\>"], "Output",
- CellChangeTimes->{3.678442057933917*^9}]
+freqsintens, graphfi, keep, loudfreqs, graphweight, colorfreqs, freqband, \
+freqlines, print3Dborder, print3Dregion, p, vard, \
+disvector,soundanalysispg,comparetheovals}\"\>"], "Output",
+ CellChangeTimes->{3.678442057933917*^9, 3.7144076588625426`*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -624,8 +627,7 @@ Cell[BoxData[
 },
 WindowSize->{808, 655},
 WindowMargins->{{34, Automatic}, {Automatic, 0}},
-FrontEndVersion->"10.4 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 11, \
-2016)",
+FrontEndVersion->"10.2 for Microsoft Windows (64-bit) (July 7, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -640,50 +642,50 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 209, 4, 28, "Input"],
-Cell[792, 28, 296, 4, 63, "Output"]
+Cell[580, 22, 332, 7, 52, "Input"],
+Cell[915, 31, 333, 4, 105, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1125, 37, 138, 1, 44, "Subsection"],
+Cell[1285, 40, 138, 1, 49, "Subsection"],
 Cell[CellGroupData[{
-Cell[1288, 42, 1863, 48, 99, "Input"],
-Cell[3154, 92, 472, 7, 28, "Output"]
+Cell[1448, 45, 1863, 48, 114, "Input"],
+Cell[3314, 95, 472, 7, 31, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[3663, 104, 1486, 40, 73, "Input"],
-Cell[5152, 146, 491, 9, 28, "Output"],
-Cell[5646, 157, 539, 10, 28, "Output"]
+Cell[3823, 107, 1486, 40, 97, "Input"],
+Cell[5312, 149, 491, 9, 31, "Output"],
+Cell[5806, 160, 539, 10, 31, "Output"]
 }, Open  ]],
-Cell[6200, 170, 580, 13, 70, "Text"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[6817, 188, 98, 1, 44, "Subsection"],
-Cell[6918, 191, 597, 15, 35, "Input"],
-Cell[7518, 208, 467, 13, 28, "Input"],
-Cell[7988, 223, 209, 4, 30, "Text"],
-Cell[CellGroupData[{
-Cell[8222, 231, 182, 3, 28, "Input"],
-Cell[8407, 236, 3508, 67, 110, "Output"]
+Cell[6360, 173, 580, 13, 68, "Text"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[11952, 308, 996, 28, 46, "Input"],
-Cell[12951, 338, 2149, 47, 97, "Output"],
-Cell[15103, 387, 550, 13, 28, "Output"]
+Cell[6977, 191, 98, 1, 49, "Subsection"],
+Cell[7078, 194, 597, 15, 33, "Input"],
+Cell[7678, 211, 467, 13, 31, "Input"],
+Cell[8148, 226, 209, 4, 30, "Text"],
+Cell[CellGroupData[{
+Cell[8382, 234, 182, 3, 31, "Input"],
+Cell[8567, 239, 3508, 67, 110, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[12112, 311, 996, 28, 46, "Input"],
+Cell[13111, 341, 2149, 47, 97, "Output"],
+Cell[15263, 390, 550, 13, 28, "Output"]
 }, Open  ]]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[15702, 406, 152, 2, 44, "Subsection"],
-Cell[15857, 410, 705, 22, 52, "Input"],
-Cell[16565, 434, 470, 13, 28, "Input"],
-Cell[17038, 449, 109, 1, 30, "Text"],
+Cell[15862, 409, 152, 2, 44, "Subsection"],
+Cell[16017, 413, 705, 22, 52, "Input"],
+Cell[16725, 437, 470, 13, 28, "Input"],
+Cell[17198, 452, 109, 1, 30, "Text"],
 Cell[CellGroupData[{
-Cell[17172, 454, 332, 5, 28, "Input"],
-Cell[17507, 461, 3579, 68, 110, "Output"]
+Cell[17332, 457, 332, 5, 28, "Input"],
+Cell[17667, 464, 3579, 68, 110, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[21123, 534, 848, 26, 46, "Input"],
-Cell[21974, 562, 2010, 45, 97, "Output"],
-Cell[23987, 609, 425, 11, 28, "Output"]
+Cell[21283, 537, 848, 26, 46, "Input"],
+Cell[22134, 565, 2010, 45, 97, "Output"],
+Cell[24147, 612, 425, 11, 28, "Output"]
 }, Open  ]]
 }, Open  ]]
 }

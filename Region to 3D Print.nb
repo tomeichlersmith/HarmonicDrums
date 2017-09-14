@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[    796513,      13164]
-NotebookOptionsPosition[    795845,      13136]
-NotebookOutlinePosition[    796200,      13152]
-CellTagsIndexPosition[    796157,      13149]
+NotebookDataLength[    798765,      13202]
+NotebookOptionsPosition[    798066,      13174]
+NotebookOutlinePosition[    798407,      13189]
+CellTagsIndexPosition[    798364,      13186]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -29,11 +29,14 @@ the membranes themselves in order to not have the drum interfere.\
 
 Cell[CellGroupData[{
 
-Cell[BoxData[
- RowBox[{"Get", "[", 
-  "\"\</Users/tomeichlersmith/Desktop/Summer Research 2016/Necessary \
-Functions.m\>\"", "]"}]], "Input",
- CellChangeTimes->{{3.677928809264195*^9, 3.6779288265231256`*^9}}],
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Get", "[", "\"\<Necessary Functions.m\>\"", "]"}]}], "Input",
+ CellChangeTimes->{{3.677928809264195*^9, 3.6779288265231256`*^9}, 
+   3.7144077804308558`*^9}],
 
 Cell[BoxData["\<\"{pluck, peak, parametricregion, egsystem, QOtriangleApprox, \
 QOtriangleApprox2, freqsintens, graphfi, keep, loudfreqs, graphweight, \
@@ -12224,8 +12227,7 @@ o3xV/JKbMgd7wKe6I2u4L77PluwRPhzTsyv9QMbclL2Cker9etrYmKdnjV0P
 3ire6TnX9lR92KzWY2Vkhs8I1/DC7DmZ4KUa54Nj42g679YRNiueswV30lry
 /x7N2dPWm+b89Anndap4748s3hP82cdyDq09PNYzx563NvjK4cmao/ZwW/Vx
 ZvpwJ93Ro/iS6i+Ln7w093ZTeLOzv8b6H3vdxVE=
-          "]], 
-         Polygon3DBox[CompressedData["
+          "]], Polygon3DBox[CompressedData["
 1:eJwt2Xf8VuMfx/E7qh+FRKSyEiISKRllRZn3OScUERXRLsmorIiKhLKirb33
 3ktLu1RGRSQpIyHC7/V+fN5/PB+d73Wfc53rXPNzXZVt3KZO66NyudyAArlc
 Qf4tkOVyR6MgjsKOJJf7El9hJy4nrSquQBUsJm0hFmEJ+uVzuf4YgIG4LOUZ
@@ -13120,7 +13122,43 @@ DYONC/az7umauKohc/+V79PYZv9+vx+XOAD3EBQz
    3.678008893100018*^9, {3.678009140399173*^9, 3.678009159682733*^9}, 
    3.6780093178786488`*^9, 3.67800940468328*^9, {3.678009454943527*^9, 
    3.678009478765655*^9}, 3.67800970274819*^9, {3.678010116826099*^9, 
-   3.678010122804641*^9}}]
+   3.678010122804641*^9}},ImageCache->GraphicsData["CompressedBitmap", "\<\
+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
+\
+\>"]]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -13136,8 +13174,7 @@ Cell[BoxData["\<\"test.stl\"\>"], "Output",
 },
 WindowSize->{808, 655},
 WindowMargins->{{12, Automatic}, {Automatic, 24}},
-FrontEndVersion->"10.4 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 11, \
-2016)",
+FrontEndVersion->"10.2 for Microsoft Windows (64-bit) (July 7, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -13153,18 +13190,19 @@ CellTagsIndex->{}
 Notebook[{
 Cell[558, 20, 440, 7, 68, "Text"],
 Cell[CellGroupData[{
-Cell[1023, 31, 209, 4, 28, "Input"],
-Cell[1235, 37, 262, 3, 63, "Output"]
+Cell[1023, 31, 309, 7, 52, "Input"],
+Cell[1335, 40, 262, 3, 72, "Output"]
 }, Open  ]],
-Cell[1512, 43, 363, 7, 49, "Text"],
-Cell[1878, 52, 2996, 74, 267, "Input"],
+Cell[1612, 46, 363, 7, 49, "Text"],
+Cell[1978, 55, 2996, 74, 312, "Input"],
 Cell[CellGroupData[{
-Cell[4899, 130, 714, 21, 28, "Input"],
-Cell[5616, 153, 789923, 12969, 28, "Output"]
+Cell[4999, 133, 714, 21, 31, "Input"],
+Cell[5716, 156, 792044, 13004, 31, 789603, 12963, "CachedBoxData", "BoxData", \
+"Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[795576, 13127, 163, 3, 28, "Input"],
-Cell[795742, 13132, 87, 1, 28, "Output"]
+Cell[797797, 13165, 163, 3, 31, "Input"],
+Cell[797963, 13170, 87, 1, 31, "Output"]
 }, Open  ]]
 }
 ]

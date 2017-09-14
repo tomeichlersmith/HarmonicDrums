@@ -49,6 +49,11 @@ parametricregion /: parametricregion::usage = "parametricregion[{{f,g},{umin,\
 umax}}] produces a region from the input simple closed parametrized \
 border\n-f,g are the *heads* of the border functions"
  
+pts = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}, {0.008000000000000007, 
+     0.0050000000000001155}}
+ 
+n = 5
+ 
 peak[{{f_, g_}, {umin_, umax_}}, (\[Delta]_)?Positive, {x0_, y0_}, 
       check_:True] /; If[RegionMember[parametricregion[
         {{f, g}, {umin, umax}}], {x0, y0}], True, 

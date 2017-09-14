@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[   1821013,      29957]
-NotebookOptionsPosition[   1820556,      29936]
-NotebookOutlinePosition[   1820912,      29952]
-CellTagsIndexPosition[   1820869,      29949]
+NotebookDataLength[   1823603,      29997]
+NotebookOptionsPosition[   1823113,      29976]
+NotebookOutlinePosition[   1823455,      29991]
+CellTagsIndexPosition[   1823412,      29988]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -29895,7 +29895,7 @@ Cell[BoxData[
     Typeset`animator$$, Typeset`animvar$$ = 1, Typeset`name$$ = 
     "\"untitled\"", Typeset`specs$$ = {{
       Hold[$CellContext`freq$$], 0, 2000}}, Typeset`size$$ = {
-    893., {150., 155.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
+    167., {22., 26.}}, Typeset`update$$ = 0, Typeset`initDone$$, 
     Typeset`skipInitDone$$ = True, $CellContext`freq$1809659$$ = 0}, 
     DynamicBox[Manipulate`ManipulateBoxes[
      1, StandardForm, "Variables" :> {$CellContext`freq$$ = 0}, 
@@ -29910,7 +29910,7 @@ Cell[BoxData[
          PlotStyle -> {Thin, Black}]], 
       "Specifications" :> {{$CellContext`freq$$, 0, 2000}}, "Options" :> {}, 
       "DefaultOptions" :> {}],
-     ImageSizeCache->{938., {194., 199.}},
+     ImageSizeCache->{272., {67., 74.}},
      SingleEvaluation->True],
     Deinitialization:>None,
     DynamicModuleValues:>{},
@@ -29931,13 +29931,52 @@ Cell[BoxData[
    3.680518118334983*^9}, 3.680518157590274*^9, 3.6805181947016687`*^9, {
    3.680518238222321*^9, 3.6805182645817204`*^9}, 3.680518357934848*^9, 
    3.680518396607885*^9, {3.680518690878663*^9, 3.680518736784709*^9}, 
-   3.680521461281445*^9}]
+   3.680521461281445*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox[
+   RowBox[{"Show", "::", "gcomb"}], "MessageName"], 
+  RowBox[{
+  ":", " "}], "\<\"Could not combine the graphics objects in \
+\[NoBreak]\\!\\(Show[\\(\\(sg, \\*GraphicsBox[List[List[List[], List[], \
+List[Directive[Opacity[1.`], AbsoluteThickness[1.6`], Thickness[Tiny], \
+GrayLevel[0]], LineBox[List[List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], List[Skeleton[2]], \
+Skeleton[27]]]]]], List[Rule[DisplayFunction, Identity], Rule[AspectRatio, \
+NCache[Power[GoldenRatio, -1], 0.6180339887498948`]], Rule[Axes, List[True, \
+True]], Rule[AxesLabel, List[None, None]], Rule[AxesOrigin, List[0, 0]], \
+RuleDelayed[DisplayFunction, Identity], Rule[Frame, List[List[False, False], \
+List[False, False]]], Rule[FrameLabel, List[List[None, None], List[None, \
+None]]], Rule[FrameTicks, List[List[Automatic, Automatic], List[Automatic, \
+Automatic]]], Rule[GridLines, List[None, None]], Rule[GridLinesStyle, \
+Directive[GrayLevel[0.5`, 0.4`]]], Rule[Method, \
+List[Rule[\\\"DefaultBoundaryStyle\\\", Automatic], Rule[\\\"DefaultMeshStyle\
+\\\", AbsolutePointSize[6]], Rule[\\\"ScalingFunctions\\\", None]]], \
+Rule[PlotRange, List[List[0, 20], List[-1.`, 1.`]]], Rule[PlotRangeClipping, \
+True], Rule[PlotRangePadding, List[List[Scaled[0.02`], Scaled[0.02`]], \
+List[Scaled[0.05`], Scaled[0.05`]]]], Rule[Ticks, List[Automatic, \
+Automatic]]]]\\)\\)]\\)\[NoBreak]. \
+\\!\\(\\*ButtonBox[\\\"\[RightSkeleton]\\\", ButtonStyle->\\\"Link\\\", \
+ButtonFrame->None, ButtonData:>\\\"paclet:ref/message/Show/gcomb\\\", \
+ButtonNote -> \\\"Show::gcomb\\\"]\\)\"\>"}]], "Message", "MSG",
+ CellChangeTimes->{3.7144077873030353`*^9}]
 }, Open  ]]
 },
 WindowSize->{1095, 655},
 WindowMargins->{{20, Automatic}, {Automatic, 44}},
-FrontEndVersion->"10.4 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 11, \
-2016)",
+FrontEndVersion->"10.2 for Microsoft Windows (64-bit) (July 7, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -29952,12 +29991,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 807, 20, 74, "Input"],
+Cell[580, 22, 807, 20, 76, "Input"],
 Cell[1390, 44, 1814782, 29791, 130, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1816209, 29840, 1988, 47, 80, "Input"],
-Cell[1818200, 29889, 2340, 44, 410, "Output"]
+Cell[1816209, 29840, 1988, 47, 92, "Input"],
+Cell[1818200, 29889, 2336, 44, 158, "Output"],
+Cell[1820539, 29935, 2558, 38, 58, "Message"]
 }, Open  ]]
 }
 ]

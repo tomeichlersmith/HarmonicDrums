@@ -10,21 +10,24 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     59921,       1181]
-NotebookOptionsPosition[     59057,       1146]
-NotebookOutlinePosition[     59412,       1162]
-CellTagsIndexPosition[     59369,       1159]
+NotebookDataLength[     60007,       1183]
+NotebookOptionsPosition[     59157,       1149]
+NotebookOutlinePosition[     59498,       1164]
+CellTagsIndexPosition[     59455,       1161]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 
 Cell[CellGroupData[{
-Cell[BoxData[
- RowBox[{"Get", "[", 
-  "\"\</Users/tomeichlersmith/Desktop/Summer Research 2016/Necessary \
-Functions.m\>\"", "]"}]], "Input",
- CellChangeTimes->{{3.679047463538899*^9, 3.679047482650091*^9}}],
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"SetDirectory", "[", 
+   RowBox[{"NotebookDirectory", "[", "]"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Get", "[", "\"\<Necessary Functions.m\>\"", "]"}]}], "Input",
+ CellChangeTimes->{{3.679047463538899*^9, 3.679047482650091*^9}, 
+   3.7144077690936613`*^9}],
 
 Cell[BoxData["\<\"{pluck, peak, parametricregion, egsystem, QOtriangleApprox, \
 QOtriangleApprox2, freqsintens, graphfi, keep, loudfreqs, graphweight, \
@@ -1146,8 +1149,7 @@ vey7gYbu+ff17YHu7fjwhO/0UfHw8fLwUYfx8vGH84dU8oL0qfNUgvLzhPSC
 },
 WindowSize->{808, 655},
 WindowMargins->{{12, Automatic}, {Automatic, 24}},
-FrontEndVersion->"10.4 for Mac OS X x86 (32-bit, 64-bit Kernel) (April 11, \
-2016)",
+FrontEndVersion->"10.2 for Microsoft Windows (64-bit) (July 7, 2015)",
 StyleDefinitions->"Default.nb"
 ]
 (* End of Notebook Content *)
@@ -1162,25 +1164,25 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 207, 4, 28, "Input"],
-Cell[790, 28, 296, 4, 63, "Output"]
+Cell[580, 22, 307, 7, 52, "Input"],
+Cell[890, 31, 296, 4, 72, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[1123, 37, 108, 1, 44, "Subsection"],
-Cell[1234, 40, 3233, 93, 216, "Input"],
-Cell[4470, 135, 173, 5, 68, "Text"]
+Cell[1223, 40, 108, 1, 49, "Subsection"],
+Cell[1334, 43, 3233, 93, 252, "Input"],
+Cell[4570, 138, 173, 5, 68, "Text"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[4680, 145, 113, 1, 44, "Subsection"],
-Cell[4796, 148, 181, 4, 30, "Text"],
-Cell[4980, 154, 1135, 32, 80, "Input"],
+Cell[4780, 148, 113, 1, 49, "Subsection"],
+Cell[4896, 151, 181, 4, 30, "Text"],
+Cell[5080, 157, 1135, 32, 92, "Input"],
 Cell[CellGroupData[{
-Cell[6140, 190, 5177, 130, 318, "Input"],
+Cell[6240, 193, 5177, 130, 372, "Input"],
 Cell[CellGroupData[{
-Cell[11342, 324, 3350, 65, 230, "Print"],
-Cell[14695, 391, 29425, 492, 361, "Print"]
+Cell[11442, 327, 3350, 65, 230, "Print"],
+Cell[14795, 394, 29425, 492, 361, "Print"]
 }, Open  ]],
-Cell[44135, 886, 14894, 256, 402, "Output"]
+Cell[44235, 889, 14894, 256, 402, "Output"]
 }, Open  ]]
 }, Open  ]]
 }
